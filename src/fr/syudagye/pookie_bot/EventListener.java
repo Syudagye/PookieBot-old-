@@ -99,6 +99,7 @@ public class EventListener extends ListenerAdapter{
 			if(!jda.getMain().getRulesMessageID().isEmpty()) {
 				if(event.getMessageId().equals(jda.getMain().getRulesMessageID())) {
 					event.getGuild().getController().addSingleRoleToMember(event.getMember(), event.getGuild().getRoleById(jda.getMain().roles.get("member").substring(3, 21))).queue();
+					event.getGuild().getController().addRolesToMember(event.getMember(), event.getGuild().getRoleById(jda.getMain().roles.get("levels").substring(3, 21))).queue();
 					event.getGuild().getController().removeSingleRoleFromMember(event.getMember(), event.getGuild().getRoleById(jda.getMain().roles.get("unverified").substring(3, 21))).queue();
 					Consumer<PrivateChannel> callback = (channel) -> channel.sendMessage("**Merci pour ta coopération !**\n> Bonne aventure a toi sur le Pookie serv !").queue();
 					event.getMember().getUser().openPrivateChannel().queue(callback);
@@ -126,7 +127,6 @@ public class EventListener extends ListenerAdapter{
 		Consumer<PrivateChannel> callback = (channel) -> channel.sendMessage(embed.build()).queue();
 		event.getMember().getUser().openPrivateChannel().queue(callback);
 		event.getGuild().getController().addRolesToMember(event.getMember(), event.getGuild().getRoleById(jda.getMain().roles.get("unverified").substring(3, 21))).queue();
-		event.getGuild().getController().addRolesToMember(event.getMember(), event.getGuild().getRoleById(jda.getMain().roles.get("levels").substring(3, 21))).queue();
 		LogSystem.log("Nouveau membre : " + event.getMember().getUser().getAsTag());
 	}
 
