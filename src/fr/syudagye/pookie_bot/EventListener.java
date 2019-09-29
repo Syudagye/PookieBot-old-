@@ -35,7 +35,7 @@ public class EventListener extends ListenerAdapter{
 		LogSystem.log("Bot ready");
 		System.out.println("Connected to " + event.getGuildAvailableCount() + " server(s)");
 		LogSystem.log("Connected to " + event.getGuildAvailableCount() + " server(s)");
-		LogSystem.log("Game Activity set to : " + Main.updateGame());
+		Main.updateGame();
 		jda.getMain().getConsole().launch();
 	}
 	

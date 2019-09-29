@@ -77,10 +77,10 @@ public class Main {
 		commands.add(new Poll(jda));
 	}
 	
-	public static String updateGame() {
+	public static void updateGame() {
 		String activity = "Fortnite (ptdr non), " + Bot.getMain().getPrefix() + "help";
 		Bot.getJda().getPresence().setGame(Game.playing(activity));
-		return activity;
+		LogSystem.log("Game Activity set to : " + activity);
 	}
 
 	private static String getJarLocation(){
@@ -89,7 +89,7 @@ public class Main {
 		path = path.substring(0, path.indexOf("Pookie_Bot"));
 		//dev_path = quand on développe
         //path = quand le code est compilé sous forme de jar
-		return dev_path;
+		return path;
 	}
 
 	public ConfigFile getConfigFile() {
