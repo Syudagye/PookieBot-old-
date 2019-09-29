@@ -2,6 +2,7 @@ package fr.syudagye.pookie_bot.commands;
 
 import fr.syudagye.pookie_bot.Command;
 import fr.syudagye.pookie_bot.JDAManager;
+import fr.syudagye.pookie_bot.LogSystem;
 import fr.syudagye.pookie_bot.xml.reports.ReportObject;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -21,15 +22,15 @@ public class Report extends Command{
 		
 		if(!(args.length >= 3)) return;
 		
-		String reason = "";
+		StringBuilder reason = new StringBuilder();
 		for(int i = 2; i < args.length; i++) {
-			reason = reason + " " + args[i];
+			reason.append(" ").append(args[i]);
 		}
 		ReportObject report = new ReportObject();
 		report.setAuthorId(event.getAuthor().getAsMention());
 		report.setId(args[1]);
 		report.setName(event.getGuild().getMemberById(args[1].substring(2, 20)).getUser().getName());
-		report.setReason(reason);
+		report.setReason(reason.toString());
 		
 		getJda().getMain().getReportsFile().reports.add(report);
 		getJda().getMain().getReportsFile().writeFile();
@@ -42,7 +43,7 @@ public class Report extends Command{
 		embed.addField("Raison", report.getReason(), true);
 		
 		event.getChannel().sendMessage(embed.build()).queue();
-		
+		LogSystem.log("[REPORT] Nouveau report par " + event.getAuthor().getAsTag());
 	}
 
 }

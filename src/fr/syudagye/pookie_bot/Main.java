@@ -22,7 +22,7 @@ public class Main {
 	
 	public static JDAManager Bot;
 	public static EventListener eventListener;
-	public static final String JAR_LOCATION = getJarLocation();
+	static final String JAR_LOCATION = getJarLocation();
 	
 	private ConfigFile configFile;
 	private Mutes mutesFile;
@@ -40,7 +40,8 @@ public class Main {
 		Bot = new JDAManager(new Main());
 	}
 	
-	public void init(JDAManager jda) {
+	void init(JDAManager jda) {
+		LogSystem.init();
 		eventListener = new EventListener(jda);
 		configFile = new ConfigFile(jda, new File(JAR_LOCATION, "config.xml"));
 		mutesFile = new Mutes(jda, new File(JAR_LOCATION, "mutes.xml"));
@@ -48,7 +49,7 @@ public class Main {
 		pollsFile = new PollsFile(jda, new File(JAR_LOCATION, "polls.xml"));
 		console = new ConsoleManager(jda);
 		initCommands(jda);
-		if(token == null || token == "") {
+		if(token == null || token.equals("")) {
 	        try {
 	            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	            System.out.print("Enter token here : ");
@@ -76,15 +77,18 @@ public class Main {
 		commands.add(new Poll(jda));
 	}
 	
-	public static void updateGame() {
-		Bot.getJda().getPresence().setGame(Game.playing("Fortnite (ptdr non), " + Bot.getMain().getPrefix() + "help"));
-
+	public static String updateGame() {
+		String activity = "Fortnite (ptdr non), " + Bot.getMain().getPrefix() + "help";
+		Bot.getJda().getPresence().setGame(Game.playing(activity));
+		return activity;
 	}
 
 	private static String getJarLocation(){
 		String dev_path = Main.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 		String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 		path = path.substring(0, path.indexOf("Pookie_Bot"));
+		//dev_path = quand on développe
+        //path = quand le code est compilé sous forme de jar
 		return dev_path;
 	}
 

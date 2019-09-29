@@ -2,6 +2,7 @@ package fr.syudagye.pookie_bot.commands.mute;
 
 import fr.syudagye.pookie_bot.Command;
 import fr.syudagye.pookie_bot.JDAManager;
+import fr.syudagye.pookie_bot.LogSystem;
 import fr.syudagye.pookie_bot.Main;
 import fr.syudagye.pookie_bot.xml.mutes.MuteObject;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -36,6 +37,7 @@ public class UnMute extends Command{
 			event.getChannel().sendMessage(":white_check_mark: " + event.getGuild().getMemberById(args[1].substring(2, 20)).getAsMention() + " à été unmute par " + event.getAuthor().getAsMention()).queue();
 			
 			getJda().getMain().getMutesFile().mutes.remove(index);
+			LogSystem.log("[MUTE] " + event.getGuild().getMemberById(mute.getId().substring(2, 20)).getUser().getAsTag() + " a été unmute par " + event.getAuthor().getAsTag());
 		}else {
 			event.getChannel().sendMessage(":x: " + args[1] + " n'est pas muté").queue();
 		}

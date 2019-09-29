@@ -2,6 +2,7 @@ package fr.syudagye.pookie_bot.commands;
 
 import fr.syudagye.pookie_bot.Command;
 import fr.syudagye.pookie_bot.JDAManager;
+import fr.syudagye.pookie_bot.LogSystem;
 import fr.syudagye.pookie_bot.Main;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
@@ -41,17 +42,12 @@ public class Config extends Command {
 				+ "`newrulesmessage`", false);
 		//channels
 		StringBuffer channelstr = new StringBuffer();
-		getJda().getMain().channels.forEach(new BiConsumer<String, String>() {
-
-			@Override
-			public void accept(String k, String v) {
-				if(k.contains("null")) {
-					return;
-				}else {
-					channelstr.append(k + " : " + v + "\n");
-				}
+		getJda().getMain().channels.forEach((k, v) -> {
+			if(k.contains("null")) {
+			}else {
+				channelstr.append(k).append(" : ").append(v).append("\n");
 			}
-		});		
+		});
 		embed.addField("__Channels__", channelstr.toString()
 				+ "--=+=-- \n"
 				+ "Pour changer un channel tapez \n"
@@ -62,15 +58,10 @@ public class Config extends Command {
 				+ "`delchannel <fonction du channel>`", false);
 		//roles
 		StringBuffer rolestr = new StringBuffer();
-		getJda().getMain().roles.forEach(new BiConsumer<String, String>() {
-
-			@Override
-			public void accept(String k, String v) {
-				if(k.contains("null")) {
-					return;
-				}else {
-					rolestr.append(k + " : " + v + "\n");
-				}
+		getJda().getMain().roles.forEach((k, v) -> {
+			if(k.contains("null")) {
+			}else {
+				rolestr.append(k).append(" : ").append(v).append("\n");
 			}
 		});
 		embed.addField("__Roles__", rolestr.toString()
@@ -82,7 +73,7 @@ public class Config extends Command {
 				+ "Pour supprimer un role tapez \n"
 				+ "`delrole <fonction du role>`", false);
 		
-		callback = (response) -> confEmbedCallback(response);
+		callback = this::confEmbedCallback;
 		event.getChannel().sendMessage(embed.build()).queue(callback);
 	}
 	
@@ -111,11 +102,12 @@ public class Config extends Command {
 			Main.eventListener.setLastConfigDead(true);
 			Main.Bot.getMain().getConfigFile().writeFile();
 			Main.updateGame();
+			LogSystem.log("[CONFIG] Les configurations on été mises a jour");
 		}else if(args[0].contains("refresh")){
 			event.getGuild().getTextChannelById(Main.eventListener.getLastConfChannelId()).deleteMessageById(Main.eventListener.getLastConfMsgId()).queue();
 			event.getGuild().getTextChannelById(Main.eventListener.getLastConfChannelId()).deleteMessageById(Main.eventListener.getLastLilPopupId()).queue();
 			for(Command cmd : Main.Bot.getMain().commands) {
-				if(cmd.getName() == "config") {
+				if(cmd.getName().equals("config")) {
 					cmd.run(event, args);
 				}
 			}
@@ -127,7 +119,7 @@ public class Config extends Command {
 			if(!(Main.Bot.getMain().channels.containsKey("rules") && Main.Bot.getMain().roles.containsKey("member") && Main.Bot.getMain().roles.containsKey("unverified"))) {
 				event.getChannel().sendMessage(":x: Vous devez d'abord spécifier un channel de règlement nommé `rules` et les roles `member` et `unverified`").queue();
 			}else {
-				Consumer<Message> callback = (response) -> rulesmsgCallback(response);;
+				Consumer<Message> callback = Config::rulesmsgCallback;
 				event.getGuild().getTextChannelById(Main.Bot.getMain().channels.get("rules").substring(2, 20)).sendMessage("**Veiller vocher si dessous __après avoir lu les règles__**").queue(callback);
 				event.getMessage().delete().queue();
 				event.getChannel().sendMessage(":gear: Le message de règlement est maintenant `" + Main.Bot.getMain().getRulesMessageID() + "` dans le channel `" + Main.Bot.getMain().channels.get("rules")+ "`").queue();

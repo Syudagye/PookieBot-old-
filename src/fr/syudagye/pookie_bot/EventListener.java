@@ -9,6 +9,7 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -31,8 +32,10 @@ public class EventListener extends ListenerAdapter{
 	@Override
 	public void onReady(ReadyEvent event) {
 		System.out.println("Bot ready");
+		LogSystem.log("Bot ready");
 		System.out.println("Connected to " + event.getGuildAvailableCount() + " server(s)");
-		Main.updateGame();
+		LogSystem.log("Connected to " + event.getGuildAvailableCount() + " server(s)");
+		LogSystem.log("Game Activity set to : " + Main.updateGame());
 		jda.getMain().getConsole().launch();
 	}
 	
@@ -40,7 +43,7 @@ public class EventListener extends ListenerAdapter{
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if(event.getAuthor().isBot()) return;
 		
-		String args[] = event.getMessage().getContentRaw().split(" ");
+		String[] args = event.getMessage().getContentRaw().split(" ");
 		
 		//Commands
 		for(Command cmd : jda.getMain().commands) {
@@ -83,6 +86,7 @@ public class EventListener extends ListenerAdapter{
 		for(Command cmd : jda.getMain().commands){
 			if(cmd instanceof Poll) poll = (Poll) cmd;
 		}
+		assert poll != null;
 		poll.bodyUpdate(event, args);
 		poll.reactionsUpdate(event, args);
 	}
@@ -107,7 +111,9 @@ public class EventListener extends ListenerAdapter{
 			if (cmd instanceof CheckReports) cp = (CheckReports) cmd;
 			if (cmd instanceof Poll) poll = (Poll) cmd;
 		}
+		assert cp != null;
 		cp.reactionEvents(event);
+		assert poll != null;
 		poll.reactionEvent(event);
 	}
 	
@@ -121,8 +127,13 @@ public class EventListener extends ListenerAdapter{
 		event.getMember().getUser().openPrivateChannel().queue(callback);
 		event.getGuild().getController().addRolesToMember(event.getMember(), event.getGuild().getRoleById(jda.getMain().roles.get("unverified").substring(3, 21))).queue();
 		event.getGuild().getController().addRolesToMember(event.getMember(), event.getGuild().getRoleById(jda.getMain().roles.get("levels").substring(3, 21))).queue();
+		LogSystem.log("Nouveau membre : " + event.getMember().getUser().getAsTag());
 	}
-	
+
+	@Override
+	public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
+		LogSystem.log(event.getMember().getUser().getAsTag() + " a quitter le server");
+	}
 
 	public JDAManager getJda() {
 		return jda;

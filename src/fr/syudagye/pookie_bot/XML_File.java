@@ -12,6 +12,7 @@ public abstract class XML_File {
 		this.file = file;
 		if(!file.exists()) {
 			createFile();
+			LogSystem.log(file.getName() + " succesfully created");
 		}else {
 			readFile();
 		}
@@ -21,7 +22,7 @@ public abstract class XML_File {
 	public abstract void writeFile();
 	public abstract void readFile();	
 
-	public File getFile() {
+	protected File getFile() {
 		return file;
 	}
 
