@@ -47,7 +47,7 @@ public class EventListener extends ListenerAdapter{
 		
 		//Commands
 		for(Command cmd : jda.getMain().commands) {
-			if(args[0].contains(jda.getMain().getPrefix() + cmd.getName())) {
+			if(args[0].equals(jda.getMain().getPrefix() + cmd.getName())) {
 				if(cmd.getAccess() == Command.STAFF_ONLY) {
 					if(event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || event.getMember().isOwner()) {
 						if(args.length > cmd.getArgsTotal()) {

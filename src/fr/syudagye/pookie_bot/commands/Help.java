@@ -35,7 +35,7 @@ public class Help extends Command{
 		embed.addField("__Commandes Membres :__", publics.toString() + "--=+=--", false);
 		embed.addField("__Commandes Staff :__", staff.toString() + "--=+=--", false);
 		embed.addField("__Commandes Admins :__", admins.toString() + "--=+=--", false);
-		embed.addField("__AH et aussi :__", "- Si vous trouvez des bugs ou des photes dortaugraffe, faites le moi savoir par mp (<@464119931282391061>) ou sur GitHub (lien github) \n"
+		embed.addField("__AH et aussi :__", "- Si vous trouvez des bugs ou des photes dortaugraffe, faites le moi savoir par mp (<@464119931282391061>) ou sur GitHub (https://github.com/Syudagye/PookieBot) \n"
 				+ "- Si vous avez des suggestions pour le bot, donnez les dans <#589553198453489674>", false);
 		
 		event.getChannel().sendMessage(embed.build()).queue();
