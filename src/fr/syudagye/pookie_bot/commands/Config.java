@@ -27,7 +27,7 @@ public class Config extends Command {
 		EmbedBuilder embed = new EmbedBuilder();
 		embed.setColor(new Color(0xFF0000));
 		embed.setTitle(":gear: **Configuration du PookieBot**");
-		embed.setDescription(":warning: Pour quitter ce menu tapez `close`\n__Attention :__ Ce menu se fermera automatiquement au bout de 60 secondes sans interaction \n"
+		embed.setDescription(":warning: Pour quitter ce menu tapez `close`\n__Attention :__ Ce menu se fermera automatiquement au bout de 120 secondes sans interaction \n"
 				+ "Pour rafraichir ce menu, tapez `refresh`");
 		embed.addField("__Prefix__", "Voici le prefix actuellement utilisé : `" + getJda().getMain().getPrefix()
 				+ "`\n --=+=-- \n"
@@ -96,9 +96,9 @@ public class Config extends Command {
 		if(!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;		
 
 
-		if(Main.eventListener.getLastConfMsgTime() + 60 < System.nanoTime() / 1000000000 || args[0].contains("close")) {
+		if(Main.eventListener.getLastConfMsgTime() + 120 < System.nanoTime() / 1000000000 || args[0].contains("close")) {
 			event.getGuild().getTextChannelById(Main.eventListener.getLastConfChannelId()).deleteMessageById(Main.eventListener.getLastConfMsgId()).queue();
-			event.getGuild().getTextChannelById(Main.eventListener.getLastConfChannelId()).editMessageById(Main.eventListener.getLastLilPopupId(), ":x: Le panneau de confiuration a été fermé").queue();
+			event.getGuild().getTextChannelById(Main.eventListener.getLastConfChannelId()).editMessageById(Main.eventListener.getLastLilPopupId(), ":x: Le panneau de configuration a été fermé").queue();
 			Main.eventListener.setLastConfigDead(true);
 			Main.Bot.getMain().getConfigFile().writeFile();
 			Main.updateGame();
@@ -144,7 +144,7 @@ public class Config extends Command {
 		}else if(args[0].contains("addchannel")) {
 			Main.Bot.getMain().channels.put(args[1], args[2]);
 			event.getMessage().delete().queue();
-			event.getChannel().sendMessage(":gear: Le channel `" + args[1] + "` correspond désomais avec `" + args[2] + "`").queue();
+			event.getChannel().sendMessage(":gear: Le channel `" + args[1] + "` correspond désomais avec " + args[2]).queue();
 		}else if(args[0].contains("delchannel")) {
 			if(!Main.Bot.getMain().channels.containsKey(args[1])) {
 				event.getChannel().sendMessage(":x: Le channel `" + args[1] + "` n'est pas spécifié").queue();
